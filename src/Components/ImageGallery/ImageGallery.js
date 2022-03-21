@@ -1,13 +1,15 @@
-import ImageGalleryItem from '../ImageGalleryItem'
+
+
 import s from './ImageGallery.module.css';
 
 
-function ImageGallery() {
+function ImageGallery({ children }) {
 
     return (
         <ul className={s.ImageGallery}>
             {/* <!-- Набор <li> с изображениями --> */}
-            <ImageGalleryItem />
+            {children}
+
         </ul>
     )
 }

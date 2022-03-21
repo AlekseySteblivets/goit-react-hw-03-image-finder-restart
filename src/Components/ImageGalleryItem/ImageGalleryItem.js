@@ -1,12 +1,16 @@
 import s from './ImageGalleryItem.module.css';
 
-function ImageGalleryItem() {
+function ImageGalleryItem({ pictures }) {
 
     return (
         <>
-            <li className={s.ImageGalleryItem}>
-                <img className={s.ImageGalleryItemImage} src="" alt="" />
-            </li>
+            {pictures.map(picture =>
+                <li key={picture.id} className={s.ImageGalleryItem}>
+                    <img className={s.ImageGalleryItemImage} src={picture.webformatURL} alt={picture.tag} />
+                </li>
+            )}
+
+
         </>
 
     )
