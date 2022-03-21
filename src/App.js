@@ -91,14 +91,14 @@ class App extends Component {
 
 
   render() {
-    const forRenderBtn = this.pictures.length > 0;
+    // const forRenderBtn = this.pictures.length > 0;
     return (
       <div>
         <Searchbar onSubmit={this.addValueForm} />
         <ImageGallery >
           <ImageGalleryItems pictures={this.state.pictures} />
         </ImageGallery>
-        {forRenderBtn && <button>Load more</button>}
+        {/* {forRenderBtn && <button>Load more</button>} */}
       </div>
     )
   }
