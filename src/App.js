@@ -3,7 +3,10 @@ import { Component } from 'react';
 import './App.css';
 import ImageGallery from './Components/ImageGallery/ImageGallery';
 import Searchbar from './Components/Searchbar';
-import ImageGalleryItems from './Components/ImageGalleryItem'
+import ImageGalleryItems from './Components/ImageGalleryItem';
+import Button from './Components/Button';
+// import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { BallTriangle } from 'react-loader-spinner';
 
 class App extends Component {
   state = {
@@ -20,35 +23,10 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('componentDidUpdate');
-    console.log('prevState.valueForm:', prevState.valueForm);
-    console.log(prevState.valueForm !== this.state.valueForm);
 
     if (prevState.valueForm !== this.state.valueForm) {
-      console.log(prevState.valueForm !== this.state.valueForm);
-
-
-
-      fetch(`https://pixabay.com/api/?q=${this.state.valueForm}&page=${this.state.page}&key=21303972-574e9d18be62e9d74443b9e84&image_type=photo&orientation=horizontal&per_page=12`)
-        .then(res => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(
-            new Error(`нет такого слова ${this.state.valueForm}`),
-          );
-        }
-        )
-        .then(data => {
-          console.log(data.hits);
-          this.setState({
-            pictures: data.hits
-          })
-        })
-        .catch(error => console.log(error))
-        .finally(() => this.setState({ isLoading: false }))
+      this.fetchPictures();
     }
-
   }
 
   componentWillUnmount() {
@@ -57,13 +35,42 @@ class App extends Component {
 
 
 
-  handleInputChange = (evt) => {
-  }
+  // handleInputChange = (evt) => {
+  // }
 
   addValueForm = (valueFromForm) => {
     this.setState({ valueForm: valueFromForm })
   }
 
+  onClickButton = () => {
+    console.log('onClickButton');
+    this.fetchPictures();
+  }
+
+  fetchPictures = () => {
+    this.setState({ isLoading: true });
+    fetch(`https://pixabay.com/api/?q=${this.state.valueForm}&page=${this.state.page}&key=21303972-574e9d18be62e9d74443b9e84&image_type=photo&orientation=horizontal&per_page=12`)
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(
+          new Error(`нет такого слова ${this.state.valueForm}`),
+        );
+      }
+      )
+      .then(data => {
+        console.log(data.hits);
+        console.log(data);
+        this.setState(prevState => ({
+          pictures: [...prevState.pictures, ...data.hits],
+          page: prevState.page + 1,
+        }))
+      })
+      .catch(error => console.log(error))
+      .finally(() => this.setState({ isLoading: false }));
+
+  }
 
   // fetchPictures = () => {
   //   const { currentPage, searchQuery } = this.state;
@@ -91,14 +98,16 @@ class App extends Component {
 
 
   render() {
-    // const forRenderBtn = this.pictures.length > 0;
+    const forRenderBtn = this.state.pictures.length > 0 && !this.state.isLoading;
     return (
       <div>
         <Searchbar onSubmit={this.addValueForm} />
         <ImageGallery >
           <ImageGalleryItems pictures={this.state.pictures} />
         </ImageGallery>
-        {/* {forRenderBtn && <button>Load more</button>} */}
+        {forRenderBtn && <Button onClickButton={this.onClickButton} />}
+        {this.state.isLoading && <BallTriangle color="#00BFFF" height={80} width={80} />}
+
       </div>
     )
   }

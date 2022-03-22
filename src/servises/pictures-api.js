@@ -17,3 +17,19 @@
 
 // export default { fetchPictures };
 
+
+// function fetchPicturesApi({ valueForm = '', page = 1 }) {
+//     fetch(`https://pixabay.com/api/?q=${valueForm}&page=${page}&key=21303972-574e9d18be62e9d74443b9e84&image_type=photo&orientation=horizontal&per_page=12`)
+//         .then(res => {
+//             if (res.ok) {
+//                 return res.json();
+//             }
+//             return Promise.reject(
+//                 new Error(`нет такого слова ${this.state.valueForm}`),
+//             );
+//         }
+//         )
+// }
+
+
+// export default { fetchPicturesApi };
