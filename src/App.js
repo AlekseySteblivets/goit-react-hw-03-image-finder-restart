@@ -11,12 +11,13 @@ import { BallTriangle } from 'react-loader-spinner';
 
 class App extends Component {
   state = {
-    valueForm: '1',
+    valueForm: '',
     pictures: [],
     page: 1,
-    isLoading: false,
     showModal: false,
     largeImgUrl: '',
+    status: 'idle',
+    error: null,
 
   }
 
@@ -29,6 +30,7 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
 
     if (prevState.valueForm !== this.state.valueForm) {
+
       this.fetchPictures();
     }
   }
@@ -47,7 +49,8 @@ class App extends Component {
   }
 
   fetchPictures = () => {
-    this.setState({ isLoading: true });
+    // this.setState({ isLoading: true });
+    this.setState({ status: 'pending' })
     fetch(`https://pixabay.com/api/?q=${this.state.valueForm}&page=${this.state.page}&key=21303972-574e9d18be62e9d74443b9e84&image_type=photo&orientation=horizontal&per_page=12`)
       .then(res => {
         if (res.ok) {
@@ -59,15 +62,19 @@ class App extends Component {
       }
       )
       .then(data => {
-        console.log(data.hits);
-        console.log(data);
+        // console.log(data.hits);
+        // console.log(data);
         this.setState(prevState => ({
           pictures: [...prevState.pictures, ...data.hits],
           page: prevState.page + 1,
-        }))
+          status: 'resolved',
+        }));
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: 'smooth',
+        });
       })
-      .catch(error => console.log(error))
-      .finally(() => this.setState({ isLoading: false }));
+      .catch(error => this.setState({ error, status: 'rejected' }))
 
   }
 
@@ -89,20 +96,52 @@ class App extends Component {
   }
 
   render() {
-    const forRenderBtn = this.state.pictures.length > 0 && !this.state.isLoading;
-    const { showModal } = this.state;
-    return (
-      <div>
-        <Searchbar onSubmit={this.addValueForm} />
+    // const forRenderBtn = this.state.pictures.length
+    const { showModal, status, error } = this.state;
+
+    if (status === 'idle') {
+      return <Searchbar onSubmit={this.addValueForm} />
+    }
+
+    if (status === 'pending') {
+
+      return <><Searchbar onSubmit={this.addValueForm} />
+        <BallTriangle color="#00BFFF" height={80} width={80} />
+      </>
+
+    }
+
+    if (status === 'rejected') {
+      return <><Searchbar onSubmit={this.addValueForm} />
+        <h1>{error.message}</h1>
+      </>
+
+
+    }
+
+    if (status === 'resolved') {
+      return <><Searchbar onSubmit={this.addValueForm} />
         <ImageGallery onClickReadyPicture={this.onWebPictureClick}>
           <ImageGalleryItems pictures={this.state.pictures} />
         </ImageGallery>
-        {forRenderBtn && <Button onClickButton={this.onClickButton} />}
-        {this.state.isLoading && <BallTriangle color="#00BFFF" height={80} width={80} />}
+        <Button onClickButton={this.onClickButton} />
         {showModal &&
           <Modal onClose={this.togleModal} largeImg={this.state.largeImgUrl} />}
-      </div>
-    )
+      </>
+    }
+
+    // return (
+    //   <div>
+    //     {/* <Searchbar onSubmit={this.addValueForm} /> */}
+    //     {/* <ImageGallery onClickReadyPicture={this.onWebPictureClick}>
+    //       <ImageGalleryItems pictures={this.state.pictures} />
+    //     </ImageGallery> */}
+    //     {/* {forRenderBtn && <Button onClickButton={this.onClickButton} />} */}
+    //     {/* {this.state.isLoading && <BallTriangle color="#00BFFF" height={80} width={80} />} */}
+    //     {showModal &&
+    //       <Modal onClose={this.togleModal} largeImg={this.state.largeImgUrl} />}
+    //   </div>
+    // )
   }
 }
 
