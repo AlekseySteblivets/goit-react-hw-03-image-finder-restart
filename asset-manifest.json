@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/goit-react-hw-03-image-finder-restart/static/css/main.7441dc3c.css",
+    "main.js": "/goit-react-hw-03-image-finder-restart/static/js/main.bf1f1d86.js",
+    "static/media/icons-Search.svg": "/goit-react-hw-03-image-finder-restart/static/media/icons-Search.2cc619f42b5296f6bcb3.svg",
+    "index.html": "/goit-react-hw-03-image-finder-restart/index.html",
+    "main.7441dc3c.css.map": "/goit-react-hw-03-image-finder-restart/static/css/main.7441dc3c.css.map",
+    "main.bf1f1d86.js.map": "/goit-react-hw-03-image-finder-restart/static/js/main.bf1f1d86.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7441dc3c.css",
+    "static/js/main.bf1f1d86.js"
+  ]
+}
