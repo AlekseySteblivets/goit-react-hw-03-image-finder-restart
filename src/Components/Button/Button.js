@@ -1,6 +1,7 @@
+import s from './Button.module.css';
 
 export default function Button({ onClickButton }) {
     return (
-        <button onClick={onClickButton}>Load more</button>
+        <button className={s.btnLoadMore} onClick={onClickButton}>Load more</button>
     )
 }

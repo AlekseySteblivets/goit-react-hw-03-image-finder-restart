@@ -3,10 +3,10 @@
 import s from './ImageGallery.module.css';
 
 
-function ImageGallery({ children }) {
+function ImageGallery({ children, onClickReadyPicture }) {
 
     return (
-        <ul className={s.ImageGallery}>
+        <ul className={s.ImageGallery} onClick={onClickReadyPicture}>
             {/* <!-- Набор <li> с изображениями --> */}
             {children}
 
